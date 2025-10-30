@@ -4,6 +4,8 @@
 
 ### Reference eBooks
 1. https://github.com/manjunath5496/HTML-CSS-Programming-Books
+2. https://github.com/jsan4christ/book-1
+3. https://github.com/maniramakumar/the-best-git-books/tree/master/books
 
 ### Microsoft Office Tutorials
 1. [Microsoft office 2019](https://edu.gcfglobal.org/en/subjects/microsoft-office/)
