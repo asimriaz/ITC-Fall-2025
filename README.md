@@ -1,5 +1,10 @@
-https://html-css-asmryz-e4989ccf7b1ed7515fcbc221d9741ffbcc8f666d3815f71.gitlab.io/
+### eBooks
+1. [HTML & CSS Design and Build Websites Jon DuCkeTT](https://html-css-asmryz-e4989ccf7b1ed7515fcbc221d9741ffbcc8f666d3815f71.gitlab.io/)
+2. [CSS: The Definitive Guide, 4th Edition](https://asmryz.github.io/csstdg4figs/)
 
-https://github.com/manjunath5496/HTML-CSS-Programming-Books
+### Reference eBooks
+1. https://github.com/manjunath5496/HTML-CSS-Programming-Books
 
-[Microsoft office 2019](https://edu.gcfglobal.org/en/subjects/microsoft-office/)
+### Microsoft Office Tutorials
+1. [Microsoft office 2019](https://edu.gcfglobal.org/en/subjects/microsoft-office/)
+
