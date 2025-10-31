@@ -3,9 +3,9 @@
 2. [CSS: The Definitive Guide, 4th Edition](https://asmryz.github.io/csstdg4figs/)
 
 ### Reference eBooks
-1. https://github.com/manjunath5496/HTML-CSS-Programming-Books
-2. https://github.com/jsan4christ/book-1
-3. https://github.com/maniramakumar/the-best-git-books/tree/master/books
+1. [HTML CSS Programming Books](https://github.com/manjunath5496/HTML-CSS-Programming-Books)
+2. [Computer Science eBoks](https://github.com/jsan4christ/book-1)
+3. [Github eBooks](https://github.com/maniramakumar/the-best-git-books/tree/master/books)
 
 ### Microsoft Office Tutorials
 1. [Microsoft office 2019](https://edu.gcfglobal.org/en/subjects/microsoft-office/)
