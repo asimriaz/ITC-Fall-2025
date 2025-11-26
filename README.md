@@ -1,4 +1,4 @@
-body { line-height: 1.25; }
+
 ### Installation
 
 Use curl to download the script and execute it with sh:
