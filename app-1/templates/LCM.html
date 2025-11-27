@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCM Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 1rem;
+        }
+
+        form {
+            margin-bottom: 1rem;
+        }
+
+        input {
+            padding: 0.4rem;
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 0.4rem 0.6rem;
+            font-size: 1rem;
+        }
+
+        table,
+        tr,
+        tr td {
+            border-collapse: collapse;
+            padding: 5px;
+        }
+
+        td {
+            border-bottom: 1px solid black;
+        }
+
+        table tr td:first-child {
+            border-right: 1px solid black;
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="display: flex; flex-wrap: wrap;">
+        {% for i in range(2, 101) %}
+        <div style="width: 50px;"><a href="#">{{ i }}</a></div>
+        {% endfor %}
+    </div>
+    <h1>LCM</h1>
+
+    <form method="POST">
+        <input name="LCM" placeholder="Enter a positive integer" value="{{ value|e }}">
+    </form>
+
+
+
+    {% if rows %}
+    <table>
+        {% for d, n in rows %}
+        <tr>
+            <td>{{ d }}</td>
+            <td>{{ n }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+
+</body>
+
+</html>

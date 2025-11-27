@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simple Form</title>
+</head>
+<body>
+  <form method="POST">
+    <input name="username" placeholder="Enter Username" value="{{ username|e }}">
+    <button type="submit">Submit</button>
+  </form>
+
+  {% if username %}
+    <h2>Form Submitted → Welcome {{ username }}</h2>
+    <pre>{{ form_data }}</pre>
+  {% endif %}
+</body>
+</html>
