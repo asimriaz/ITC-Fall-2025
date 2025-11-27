@@ -1,3 +1,7 @@
+## eBooks
+1. Flask Web Development by Miguel Grinberg [source code](https://github.com/miguelgrinberg/flasky)
+2. Mastering Flask Web  and API Development by Sherwin John C. Tragura [source code](https://github.com/PacktPublishing/Mastering-Flask-Web-Development)
+
 
 ### Installation
 
