@@ -71,6 +71,12 @@ Global options:
 Use `uv help` for more details.
 ```
 
+initialize Flask Project
+
+```sh
+uv init app-1
+```
+
 install packages
 
 ```sh
