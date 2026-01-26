@@ -1,6 +1,6 @@
-FIRST PROMPT:
+#FIRST PROMPT:
 I want to create a web application to manage a list of countries. 
-The app should display a table of 20 countries with ID, name, and status. 
+The app should display a table of 20 countries  name, and status. 
 Users should be able to search countries by name . 
 The table should allow inline editing: clicking on a row should let users edit the country name and change its status between "Visited" and "Not Visited". 
 All changes must be saved to a JSON file using a Flask backend. 

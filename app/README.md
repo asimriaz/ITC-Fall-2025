@@ -2,7 +2,6 @@
 
 This is a **web application to manage a list of countries**. It allows users to **view, search, and edit** the name and status of countries using a modern inline editable table with Tailwind CSS styling.
 
----
 
 ## Features
 
@@ -13,7 +12,6 @@ This is a **web application to manage a list of countries**. It allows users to 
 - **Modern, responsive styling** with Tailwind CSS.
 - Saves changes **directly to the backend** (via Flask API endpoints).
 
----
 
 ## Technologies Used
 
@@ -21,8 +19,6 @@ This is a **web application to manage a list of countries**. It allows users to 
 - **HTML / CSS / JavaScript**  
 - **Tailwind CSS** for styling  
 - **JSON** file to store country data  
-
----
 
 ## Project Structure
 
