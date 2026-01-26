@@ -1,169 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Books</title>
-    <style>
-        * {
-            font-family: Roboto, "Ubuntu Sans", Arial, sans-serif;
-            font-size: 14px;
-        }
-
-        table,
-        th,
-        td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 5px;
-        }
-
-        a:visited {
-            color: blue;
-        }
-    </style>
-    <script>
-        function getSearch() {
-            const searchTerm = document.querySelector("#search").value.toLowerCase();
-            console.log(searchTerm)
-            
-            // Only search if searchTerm length is greater than 2
-            if (searchTerm.length > 2) {
-                fetch("/api/books/search", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ title: searchTerm }),
-                })
-                    .then((response) => response.json())
-                    .then((books) => {
-                        console.log(books);
-                        let html = ``;
-                        books.forEach((book) => {
-                            html += `<tr>
-                            <td>${book.bookid}</td>
-                            <td><a href="#!" onclick="handleClick(${book.bookid})">${book.title}</a></td>
-                            <td>${book.status}</td>
-                        </tr>`;
-                        });
-                        document.querySelector("tbody").innerHTML = html;
-                    });
-            } else if (searchTerm.length === 0) {
-                // If search is cleared, show all books
-                fetchBooks();
-            }
-        }
-        function handleSave() {
-            updated_book = {
-                bookid: document.querySelector("#bookid").value,
-                title: document.querySelector("#title").value,
-                status: document.querySelector("#status").value,
-            };
-
-            fetch('/api/books/save', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updated_book),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log('Success:', data);
-                    document.querySelector("#edit").style.display = "none";
-                    fetchBooks();
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-        }
-
-        function handleClick(bookId) {
-            // alert(bookId);
-            fetch(`/api/books/${bookId}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    // alert(`BookId: ${data.bookid}\nTitle: ${data.title}`);
-                    document.querySelector("#edit").style.display = "block";
-                    let html = `<tr>
-                        <th>BookId</th>
-                        <td>
-                            ${data.bookid}
-                            <input type="hidden" id="bookid" value="${data.bookid}"/>
-                        </td>
-                    </tr>
-                    <tr>
-                    <th>Title</th>
-                        <td>
-                            <textarea id="title" rows="3" cols="30">${data.title}</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Status</th>
-                        <td>
-                            <input type="text" id="status" value="${data.status}"/>
-                        </td>
-                    </tr>                    
-                    <tr>
-                        <td colspan="2">
-                            <button type="submit" onclick="handleSave()">Save</button>
-                        </td>
-                    </tr>`;
-                    document.querySelector("#edit tbody").innerHTML = html;
-                });
-        }
-
-        function fetchBooks() {
-            fetch("/api/books")
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log(data);
-                    books = data;
-                    let html = ``;
-                    books.forEach((book) => {
-                        html += `<tr>
-                            <td>${book.bookid}</td>
-                            <td><a href="#!" onclick="handleClick(${book.bookid})">${book.title}</a></td>
-                            <td>${book.status}</td>
-                        </tr>`;
-                    });
-                    document.querySelector("tbody").innerHTML = html;
-                });
-        }
-        fetchBooks();
-    </script>
+    <meta charset="UTF-8">
+    <title>Country Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-gray-100 p-6 font-sans">
 
-<body>
-    <input type="text" name="search" id="search" placeholder="Search..." oninput="getSearch()" />
-    <div style="display: flex">
-        <div>
-            <h2>Books</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th style="width: 550px;">Title</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-        <div id="edit" style="display: none;">
-            <h2>Edit</h2>
+<h1 class="text-3xl font-bold mb-6 text-center">Country Management</h1>
 
-            <table id="edit">
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
+<!-- Search Box -->
+<div class="mb-6 flex justify-center">
+    <input type="text" id="search" placeholder="Search country..." 
+           class="border border-gray-400 p-2 rounded w-1/2"
+           oninput="searchCountries()">
+</div>
+
+<div class="overflow-x-auto">
+    <table class="table-auto w-full border border-gray-400 bg-white">
+        <thead class="bg-gray-200 border-b border-gray-400">
+            <tr>
+                <th class="px-4 py-2 border-r border-gray-400">ID</th>
+                <th class="px-4 py-2 border-r border-gray-400">Name</th>
+                <th class="px-4 py-2">Status</th>
+                <th class="px-4 py-2">Action</th>
+            </tr>
+        </thead>
+        <tbody id="countryList" class="divide-y divide-gray-300"></tbody>
+    </table>
+</div>
+
+<script>
+    // Render countries into table
+    function renderCountries(data) {
+        let html = "";
+        data.forEach(c => {
+            html += `<tr>
+                <td class="px-4 py-2 border-r border-gray-400">${c.countryid}</td>
+                <td class="px-4 py-2 border-r border-gray-400">
+                    <input type="text" id="name-${c.countryid}" value="${c.name}" 
+                           class="border p-1 rounded w-full">
+                </td>
+                <td class="px-4 py-2">
+                    <select id="status-${c.countryid}" class="border p-1 rounded w-full">
+                        <option value="Visited" ${c.status === 'Visited' ? 'selected' : ''}>Visited</option>
+                        <option value="Not Visited" ${c.status === 'Not Visited' ? 'selected' : ''}>Not Visited</option>
+                    </select>
+                </td>
+                <td class="px-4 py-2">
+                    <button onclick="saveCountry(${c.countryid})" 
+                            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                        Save
+                    </button>
+                </td>
+            </tr>`;
+        });
+        document.querySelector("#countryList").innerHTML = html;
+    }
+
+    // Fetch all countries
+    function fetchCountries() {
+        fetch("/api/countries")
+            .then(res => res.json())
+            .then(data => renderCountries(data));
+    }
+
+    // Search countries
+    function searchCountries() {
+        const term = document.querySelector("#search").value;
+        if (term.length > 2) {
+            fetch("/api/countries/search", {
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify({name: term})
+            })
+            .then(res => res.json())
+            .then(data => renderCountries(data));
+        } else {
+            fetchCountries();
+        }
+    }
+
+    // Save a single country inline
+    function saveCountry(id) {
+        const updated = {
+            countryid: id,
+            name: document.querySelector(`#name-${id}`).value,
+            status: document.querySelector(`#status-${id}`).value
+        };
+
+        fetch("/api/countries/save", {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify(updated)
+        })
+        .then(res => res.json())
+        .then(() => fetchCountries());
+    }
+
+    // Initial load
+    fetchCountries();
+</script>
+
 </body>
-
 </html>

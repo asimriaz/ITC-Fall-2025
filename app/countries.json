@@ -1,0 +1,22 @@
+[
+  {"countryid": 1, "name": "France", "status": "Not Visited"},
+  {"countryid": 2, "name": "USA", "status": "Visited"},
+  {"countryid": 3, "name": "China", "status": "Not Visited"},
+  {"countryid": 4, "name": "India", "status": "Visited"},
+  {"countryid": 5, "name": "Italy", "status": "Not Visited"},
+  {"countryid": 6, "name": "Brazil", "status": "Visited"},
+  {"countryid": 7, "name": "Japan", "status": "Not Visited"},
+  {"countryid": 8, "name": "Australia", "status": "Visited"},
+  {"countryid": 9, "name": "Canada", "status": "Not Visited"},
+  {"countryid": 10, "name": "Germany", "status": "Visited"},
+  {"countryid": 11, "name": "Egypt", "status": "Not Visited"},
+  {"countryid": 12, "name": "Mexico", "status": "Visited"},
+  {"countryid": 13, "name": "Russia", "status": "Not Visited"},
+  {"countryid": 14, "name": "South Africa", "status": "Visited"},
+  {"countryid": 15, "name": "Argentina", "status": "Not Visited"},
+  {"countryid": 16, "name": "Spain", "status": "Visited"},
+  {"countryid": 17, "name": "Turkey", "status": "Not Visited"},
+  {"countryid": 18, "name": "Thailand", "status": "Visited"},
+  {"countryid": 19, "name": "Greece", "status": "Not Visited"},
+  {"countryid": 20, "name": "Norway", "status": "Visited"}
+]
