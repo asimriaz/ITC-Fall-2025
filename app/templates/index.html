@@ -5,115 +5,117 @@
     <title>Country Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-100 p-6 font-sans">
 
 <h1 class="text-3xl font-bold mb-6 text-center">Country Management</h1>
 
 <div class="mb-6 flex justify-center">
-    <input type="text" id="search" placeholder="Search country..." 
-           class="border border-gray-400 p-3 rounded-lg w-1/2 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+    <input id="search" type="text" placeholder="Search country..."
+           class="border p-3 rounded w-1/2"
            oninput="searchCountries()">
 </div>
 
-<div class="overflow-x-auto relative">
-    <table class="table-auto w-full border border-gray-400 bg-white">
-        <thead class="bg-gray-200 border-b border-gray-400">
-            <tr>
-                <th class="px-4 py-2 border-r border-gray-400">ID</th>
-                <th class="px-4 py-2 border-r border-gray-400">Name</th>
-                <th class="px-4 py-2 border-r border-gray-400">Status</th>
-                <th class="px-4 py-2">Action</th>
-            </tr>
-        </thead>
-        <tbody id="countryList" class="divide-y divide-gray-300"></tbody>
-    </table>
+<table class="w-full bg-white border">
+    <thead class="bg-gray-200">
+        <tr>
+            <th class="p-2 border">ID</th>
+            <th class="p-2 border">Name</th>
+            <th class="p-2 border">Status</th>
+            <th class="p-2 border">Action</th>
+        </tr>
+    </thead>
+    <tbody id="countryList"></tbody>
+</table>
+
+<!-- Popup -->
+<div id="popup"
+     class="fixed top-5 right-5 px-4 py-2 rounded text-white opacity-0 transition-opacity duration-500">
 </div>
 
-<!-- Popup Notification -->
-<div id="popup" class="fixed top-6 right-6 bg-green-500 text-white px-4 py-2 rounded shadow-lg opacity-0 transition-opacity duration-500 z-50"></div>
-
 <script>
-    function renderCountries(data) {
-        let html = "";
-        data.forEach(c => {
-            html += `<tr id="row-${c.countryid}">
-                <td class="px-4 py-2 border-r border-gray-400">${c.countryid}</td>
-                <td class="px-4 py-2 border-r border-gray-400">
-                    <input type="text" id="name-${c.countryid}" value="${c.name}" 
-                           class="border p-1 rounded w-full">
-                </td>
-                <td class="px-4 py-2 border-r border-gray-400">
-                    <select id="status-${c.countryid}" class="border p-1 rounded w-full">
-                        <option value="Visited" ${c.status === 'Visited' ? 'selected' : ''}>Visited</option>
-                        <option value="Not Visited" ${c.status === 'Not Visited' ? 'selected' : ''}>Not Visited</option>
-                    </select>
-                </td>
-                <td class="px-4 py-2">
-                    <button onclick="saveCountry(${c.countryid})" 
-                            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-                        Save
-                    </button>
-                </td>
-            </tr>`;
-        });
-        document.querySelector("#countryList").innerHTML = html;
-    }
+function renderCountries(data) {
+    let html = "";
+    data.forEach(c => {
+        html += `
+        <tr id="row-${c.countryid}">
+            <td class="border p-2">${c.countryid}</td>
+            <td class="border p-2">
+                <input id="name-${c.countryid}" value="${c.name}" class="border p-1 w-full">
+            </td>
+            <td class="border p-2">
+                <select id="status-${c.countryid}" class="border p-1 w-full">
+                    <option ${c.status=="Visited"?"selected":""}>Visited</option>
+                    <option ${c.status=="Not Visited"?"selected":""}>Not Visited</option>
+                </select>
+            </td>
+            <td class="border p-2 text-center">
+                <button onclick="saveCountry(${c.countryid})"
+                        class="bg-blue-500 text-white px-3 py-1 rounded">
+                    Save
+                </button>
+            </td>
+        </tr>`;
+    });
+    document.getElementById("countryList").innerHTML = html;
+}
 
-    function fetchCountries() {
-        fetch("/api/countries")
-            .then(res => res.json())
-            .then(data => renderCountries(data));
-    }
+function fetchCountries() {
+    fetch("/api/countries")
+        .then(res => res.json())
+        .then(data => renderCountries(data));
+}
 
-    function searchCountries() {
-        const term = document.querySelector("#search").value;
-        if (term.length > 2) {
-            fetch("/api/countries/search", {
-                method: "POST",
-                headers: {"Content-Type":"application/json"},
-                body: JSON.stringify({name: term})
-            })
-            .then(res => res.json())
-            .then(data => renderCountries(data));
-        } else {
-            fetchCountries();
-        }
-    }
-
-    function saveCountry(id) {
-        const updated = {
-            countryid: id,
-            name: document.querySelector(`#name-${id}`).value,
-            status: document.querySelector(`#status-${id}`).value
-        };
-
-        fetch("/api/countries/save", {
+function searchCountries() {
+    const term = document.getElementById("search").value;
+    if (term.length > 1) {
+        fetch("/api/countries/search", {
             method: "POST",
             headers: {"Content-Type":"application/json"},
-            body: JSON.stringify(updated)
+            body: JSON.stringify({name: term})
         })
         .then(res => res.json())
-        .then(data => {
-            showPopup(data.message || data.error, res.ok);
+        .then(data => renderCountries(data));
+    } else {
+        fetchCountries();
+    }
+}
 
-            // Highlight the updated row
+function saveCountry(id) {
+    const updated = {
+        countryid: id,
+        name: document.getElementById(`name-${id}`).value,
+        status: document.getElementById(`status-${id}`).value
+    };
+
+    fetch("/api/countries/save", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(updated)
+    })
+    .then(res => res.json().then(data => ({ok: res.ok, data})))
+    .then(({ok, data}) => {
+        showPopup(data.message || data.error, ok);
+
+        if (ok) {
             const row = document.getElementById(`row-${id}`);
-            row.classList.add('bg-gray-700', 'text-white', 'transition-colors', 'duration-500');
-            setTimeout(() => row.classList.remove('bg-gray-700', 'text-white'), 2000);
+            row.classList.add("bg-green-200");
+            setTimeout(() => row.classList.remove("bg-green-200"), 2500);
+        }
+    });
+}
 
-            fetchCountries(); // refresh table
-        });
-    }
+function showPopup(msg, success) {
+    const popup = document.getElementById("popup");
+    popup.textContent = msg;
+    popup.className = success
+        ? "fixed top-5 right-5 bg-green-600 px-4 py-2 rounded text-white opacity-100"
+        : "fixed top-5 right-5 bg-red-600 px-4 py-2 rounded text-white opacity-100";
 
-    function showPopup(message, success=true) {
-        const popup = document.getElementById('popup');
-        popup.textContent = message;
-        popup.classList.remove('opacity-0');
-        popup.style.backgroundColor = success ? '#16a34a' : '#dc2626';
-        setTimeout(() => popup.classList.add('opacity-0'), 2000);
-    }
+    setTimeout(() => popup.classList.add("opacity-0"), 2000);
+}
 
-    fetchCountries();
+fetchCountries();
 </script>
 
 </body>
