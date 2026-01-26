@@ -1,64 +1,46 @@
-import flask
+from flask import Flask, jsonify, request, render_template
 import json
-from flask import Flask, request, render_template_string, render_template
+import os
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 
-# Global books data
-books = []
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_FILE = os.path.join(BASE_DIR, "countries.json")
 
-def load_books():
-    """Load books from JSON file into global books list"""
-    global books
-    with open('books.json', 'r') as f:
-        books = json.load(f)
+# Load data
+with open(DATA_FILE, "r") as f:
+    countries = json.load(f)
 
-# Initialize books data on startup
-load_books()
-
-# ---------------- Root Route ----------------
 @app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
-# ---------------- Books Route ----------------
-@app.route("/api/books")
-def get_books():
-    return flask.jsonify(books)
+@app.route("/api/countries")
+def get_countries():
+    return jsonify(countries)
 
-@app.route("/api/books/<int:id>")
-def get_book_by_id(id):
-    for book in books:
-        if book['bookid'] == id:
-            return flask.jsonify(book)
-    return flask.jsonify({"error": "Book not found"}), 404
+@app.route("/api/countries/save", methods=["POST"])
+def save_country():
+    updated = request.get_json()
+    updated["countryid"] = int(updated["countryid"])
 
-@app.route("/api/books/save", methods=['POST'])
-def save_book():
-    new_book = request.get_json()
-    # Convert bookid to int for comparison
-    new_book['bookid'] = int(new_book['bookid'])
-    
-    for i, book in enumerate(books):
-        if book['bookid'] == new_book['bookid']:
-            books[i] = new_book
-            return flask.jsonify({"message": "Book updated successfully"}), 200 
-            
-    return flask.jsonify({"error": "Book not found"}), 404
+    for i, c in enumerate(countries):
+        if c["countryid"] == updated["countryid"]:
+            countries[i] = updated
 
-@app.route("/api/books/search", methods=['POST'])
-def serarch_books():
-    criteria = request.get_json()
-    title = criteria.get('title', '').lower()
-    
-    filtered_books = [
-        book for book in books
-        if (title in book['title'].lower() if title else True)
-    ]
-    
-    return flask.jsonify(filtered_books)
+            # optional: save back to file
+            with open(DATA_FILE, "w") as f:
+                json.dump(countries, f, indent=2)
+
+            return jsonify({"message": "Country saved successfully"}), 200
+
+    return jsonify({"error": "Country not found"}), 404
+
+@app.route("/api/countries/search", methods=["POST"])
+def search_countries():
+    data = request.get_json()
+    name = data.get("name", "").lower()
+    return jsonify([c for c in countries if name in c["name"].lower()])
 
 if __name__ == "__main__":
-    # Development server — use `flask run` or a production server for deployment
     app.run(debug=True, host="0.0.0.0", port=5500)
-
